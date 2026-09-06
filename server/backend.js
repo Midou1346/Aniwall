@@ -1,26 +1,15 @@
-/**
- * AniWalls Backend Server - Production Ready
- * 
- * Features:
- * - Express.js server with proper middleware
- * - SQLite database for permanent storage
- * - File upload with Multer
- * - REST API for wallpaper management
- * - CORS enabled for frontend access
- * - Error handling & validation
- * - Rate limiting
- * 
- * Run: npm install && npm start
- */
-
+require('dotenv').config();
+const { createClient } = require('@supabase/supabase-js');
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey);
+const cors = require('cors');
 const express = require('express');
 const multer = require('multer');
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 const fs = require('fs');
-const cors = require('cors');
 const rateLimit = require('express-rate-limit');
-require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -66,9 +55,9 @@ const storage = multer.diskStorage({
 const fileFilter = (req, file, cb) => {
   const allowedMimes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
   const allowedExts = ['.jpg', '.jpeg', '.png', '.webp', '.gif'];
-  
+
   const ext = path.extname(file.originalname).toLowerCase();
-  
+
   if (allowedMimes.includes(file.mimetype) && allowedExts.includes(ext)) {
     cb(null, true);
   } else {
@@ -166,7 +155,7 @@ function generateId() {
 // Run database query (Promise wrapper)
 function dbRun(sql, params = []) {
   return new Promise((resolve, reject) => {
-    db.run(sql, params, function(err) {
+    db.run(sql, params, function (err) {
       if (err) reject(err);
       else resolve(this);
     });
@@ -208,13 +197,13 @@ app.get('/api/health', (req, res) => {
 app.get('/api/wallpapers', async (req, res) => {
   try {
     const wallpapers = await dbAll('SELECT * FROM wallpapers ORDER BY uploadedAt DESC');
-    
+
     // Parse JSON fields
     const parsed = wallpapers.map(wp => ({
       ...wp,
       tags: typeof wp.tags === 'string' ? JSON.parse(wp.tags) : wp.tags
     }));
-    
+
     res.json({
       success: true,
       count: parsed.length,
@@ -237,18 +226,18 @@ app.get('/api/wallpapers/:id', async (req, res) => {
       'SELECT * FROM wallpapers WHERE id = ?',
       [req.params.id]
     );
-    
+
     if (!wallpaper) {
       return res.status(404).json({
         success: false,
         error: 'Wallpaper not found'
       });
     }
-    
-    wallpaper.tags = typeof wallpaper.tags === 'string' 
-      ? JSON.parse(wallpaper.tags) 
+
+    wallpaper.tags = typeof wallpaper.tags === 'string'
+      ? JSON.parse(wallpaper.tags)
       : wallpaper.tags;
-    
+
     res.json({ success: true, wallpaper });
   } catch (error) {
     res.status(500).json({
@@ -281,7 +270,31 @@ app.post('/api/wallpapers/upload', upload.single('wallpaper'), async (req, res) 
     }
 
     const id = generateId();
-    const imgPath = `/wallpapers/${req.file.filename}`;
+    // Read file from local temp folder
+    const fileBuffer = fs.readFileSync(req.file.path);
+    const fileName = `${Date.now()}-${req.file.originalname}`;
+
+    // Upload to Supabase Bucket 'Wallpapers'
+    const { data: uploadData, error: uploadError } = await supabase.storage
+      .from('Wallpapers')
+      .upload(fileName, fileBuffer, {
+        contentType: req.file.mimetype,
+        upsert: false
+      });
+
+    if (uploadError) {
+      throw uploadError;
+    }
+
+    // Get Public URL from Supabase
+    const { data: publicURLData } = supabase.storage
+      .from('Wallpapers')
+      .getPublicUrl(fileName);
+
+    const imgPath = publicURLData.publicUrl;
+
+    // Delete local temp file to save space
+    fs.unlinkSync(req.file.path);
 
     const sql = `
       INSERT INTO wallpapers 
@@ -343,9 +356,9 @@ app.post('/api/wallpapers/upload', upload.single('wallpaper'), async (req, res) 
     if (req.file) {
       try {
         fs.unlinkSync(req.file.path);
-      } catch (e) {}
+      } catch (e) { }
     }
-    
+
     res.status(500).json({
       success: false,
       error: 'Upload failed',
@@ -447,7 +460,7 @@ app.put('/api/wallpapers/:id', async (req, res) => {
     const { ten, tar, anime, cat, tags, res: resolution, is4k, rate, likes, dls, featured } = req.body;
 
     const wallpaper = await dbGet('SELECT * FROM wallpapers WHERE id = ?', [req.params.id]);
-    
+
     if (!wallpaper) {
       return res.status(404).json({
         success: false,
@@ -508,7 +521,7 @@ app.put('/api/wallpapers/:id', async (req, res) => {
 app.delete('/api/wallpapers/:id', async (req, res) => {
   try {
     const wallpaper = await dbGet('SELECT * FROM wallpapers WHERE id = ?', [req.params.id]);
-    
+
     if (!wallpaper) {
       return res.status(404).json({
         success: false,
@@ -548,7 +561,7 @@ app.delete('/api/wallpapers/:id', async (req, res) => {
 app.post('/api/wallpapers/:id/download', async (req, res) => {
   try {
     const wallpaper = await dbGet('SELECT * FROM wallpapers WHERE id = ?', [req.params.id]);
-    
+
     if (!wallpaper) {
       return res.status(404).json({
         success: false,
@@ -557,7 +570,7 @@ app.post('/api/wallpapers/:id/download', async (req, res) => {
     }
 
     const newDls = (wallpaper.dls || 0) + 1;
-    
+
     await dbRun(
       'UPDATE wallpapers SET dls = ? WHERE id = ?',
       [newDls, req.params.id]
@@ -580,7 +593,7 @@ app.post('/api/wallpapers/:id/download', async (req, res) => {
 // Verify admin access
 app.post('/api/admin/verify', (req, res) => {
   const { passcode } = req.body;
-  
+
   if (!passcode) {
     return res.status(400).json({
       success: false,
@@ -632,7 +645,7 @@ app.get('/api/admin/logs', async (req, res) => {
     const logs = await dbAll(
       'SELECT * FROM admin_logs ORDER BY timestamp DESC LIMIT 100'
     );
-    
+
     res.json({
       success: true,
       logs
