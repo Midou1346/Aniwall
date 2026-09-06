@@ -1,26 +1,24 @@
 {
   "background_color": "#b24b8e",
   "dir": "ltr",
-  "display": "browser",
+  "display": "standalone",
   "name": "Aniwall",
   "orientation": "natural",
-  "scope": "www.Aniwall.com",
+  "scope": "./",
   "short_name": "Aniwall",
-  "start_url": "www.Aniwall.com",
+  "start_url": "./",
   "theme_color": "#070710",
   "id": "Aniwall.Midou31",
   "description": "Application for anime wallpapers",
   "lang": "ar",
   "display_override": [
-    "browser",
-    "fullscreen",
-    "minimal-ui",
     "window-controls-overlay",
-    "standalone"
+    "standalone",
+    "minimal-ui"
   ],
   "categories": [
     "design",
-    "multimedia design",
+    "multimedia",
     "photo"
   ]
 }
