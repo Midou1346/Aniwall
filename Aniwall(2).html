@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no"/>
+<meta name="theme-color" content="#070710"/>
+<title>AniWalls ⚡ Anime Wallpapers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{color-scheme:dark;
+ --bg:#070710;--panel:rgba(255,255,255,.045);--panel2:rgba(255,255,255,.09);
+ --line:rgba(255,255,255,.09);--tx:#f1f0ff;--tx2:#a7a5c0;--tx3:#6f6d8f;
+ --p1:#8b5cf6;--p2:#a855f7;--cyan:#22d3ee;--pink:#ec4899;--red:#f43f5e;--gold:#fbbf24;
+ --grad:linear-gradient(135deg,#7c3aed,#a855f7 45%,#ec4899);
+}
+html,body{height:100%}
+body{background:#030308;font-family:'Cairo','Orbitron',sans-serif;color:var(--tx);display:flex;align-items:center;justify-content:center;-webkit-font-smoothing:antialiased}
+#root{width:100%;display:flex;justify-content:center}
+.app{position:relative;width:100%;max-width:430px;height:100dvh;background:var(--bg);overflow:hidden;display:flex;flex-direction:column;box-shadow:0 0 90px rgba(124,58,237,.14)}
+@media(min-width:480px){.app{height:min(920px,94vh);border-radius:34px;border:1px solid var(--line)}}
+.app.night-off{filter:saturate(.85)}
+.app.night-off .bgfx{opacity:.35}
+.app.night-off .logo,.app.night-off .crown-btn{filter:none;box-shadow:none}
+
+/* background fx */
+.bgfx{position:absolute;inset:0;pointer-events:none;z-index:0}
+.bgfx::before{content:'';position:absolute;width:340px;height:340px;border-radius:50%;top:-90px;inset-inline-start:-90px;background:radial-gradient(circle,rgba(124,58,237,.30),transparent 65%)}
+.bgfx::after{content:'';position:absolute;width:320px;height:320px;border-radius:50%;bottom:60px;inset-inline-end:-110px;background:radial-gradient(circle,rgba(34,211,238,.16),transparent 65%)}
+.gridbg{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:34px 34px;-webkit-mask-image:linear-gradient(#000 5%,transparent 62%);mask-image:linear-gradient(#000 5%,transparent 62%)}
+
+/* header */
+.hdr{display:flex;align-items:center;gap:9px;padding:14px 16px 10px;z-index:5}
+.icon-btn{width:38px;height:38px;border-radius:12px;background:var(--panel);border:1px solid var(--line);color:var(--tx);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.2s;flex:0 0 auto}
+.icon-btn:active{transform:scale(.9)}
+.icon-btn.sm{width:32px;height:32px;border-radius:10px}
+.icon-btn.danger{color:var(--red)}
+.icon-btn.favd{color:var(--red)!important;border-color:rgba(244,63,94,.6)!important;box-shadow:0 0 14px rgba(244,63,94,.4)}
+.logo{font-family:'Orbitron','Cairo',sans-serif;font-weight:900;font-size:20px;letter-spacing:1px;background:linear-gradient(90deg,#c4b5fd,#22d3ee);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 12px rgba(139,92,246,.55));margin-inline-end:auto}
+.lang-btn{display:flex;align-items:center;gap:6px;padding:8px 12px;border-radius:999px;background:var(--panel);border:1px solid var(--line);font-weight:800;font-size:12.5px;color:var(--cyan);cursor:pointer;font-family:inherit;transition:.2s}
+.lang-btn:active{transform:scale(.93)}
+.crown-btn{color:var(--gold);border-color:rgba(251,191,36,.3);box-shadow:0 0 10px rgba(251,191,36,.2)}
+
+/* content */
+.content{flex:1;overflow-y:auto;overflow-x:hidden;padding:0 16px 22px;position:relative;z-index:1;scrollbar-width:none}
+.content::-webkit-scrollbar{display:none}
+.pg{animation:fadeUp .35s both}
+.sec{display:flex;align-items:center;justify-content:space-between;margin:22px 2px 12px}
+.sec h3{font-size:15.5px;font-weight:800}
+.sec .more{color:var(--p2);font-size:12px;font-weight:800;cursor:pointer}
+
+/* hero */
+.hero{position:relative;height:300px;border-radius:24px;overflow:hidden;border:1px solid var(--line);margin-top:6px;background:#0b0b18}
+.hero-slide{position:absolute;inset:0;opacity:0;transform:scale(1.06);transition:opacity .8s,transform .8s}
+.hero-slide.on{opacity:1;transform:scale(1)}
+.hero-slide img{width:100%;height:100%;object-fit:cover}
+.hero-shade{position:absolute;inset:0;background:linear-gradient(to top,rgba(5,5,12,.95) 8%,rgba(5,5,12,.2) 55%,rgba(5,5,12,.35))}
+.hero-txt{position:absolute;inset-inline:0;bottom:0;padding:20px;animation:fadeUp .5s both}
+.hero-badge{display:inline-block;background:rgba(124,58,237,.28);border:1px solid rgba(168,85,247,.5);backdrop-filter:blur(4px);color:#d8ccff;font-size:9.5px;font-weight:800;letter-spacing:1px;padding:5px 11px;border-radius:99px;margin-bottom:10px}
+.hero-title{font-family:'Orbitron','Cairo',sans-serif;font-size:25px;line-height:1.25;font-weight:900;text-shadow:0 2px 18px rgba(0,0,0,.6)}
+.hero-title .g{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero-sub{color:#c9c7dd;font-size:12.5px;margin:6px 0 14px;font-weight:600}
+.cta{display:inline-flex;align-items:center;gap:7px;background:var(--grad);color:#fff;border:none;border-radius:999px;padding:11px 20px;font-family:inherit;font-size:12.5px;font-weight:800;cursor:pointer;box-shadow:0 8px 24px rgba(139,92,246,.5);transition:.2s}
+.cta:active{transform:scale(.95)}
+.hero-dots{position:absolute;bottom:13px;inset-inline-end:16px;display:flex;gap:5px;z-index:3}
+.dot{width:6px;height:6px;border-radius:99px;background:rgba(255,255,255,.3);cursor:pointer;transition:.3s}
+.dot.on{width:18px;background:var(--p2)}
+
+/* categories */
+.hscroll{display:flex;gap:12px;overflow-x:auto;padding:2px 2px 8px;scrollbar-width:none}
+.hscroll::-webkit-scrollbar{display:none}
+.cat{min-width:80px;height:86px;border-radius:18px;background:var(--panel);border:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;cursor:pointer;flex:0 0 auto;transition:.2s}
+.cat:active{transform:scale(.93)}
+.cat .em{font-size:24px;filter:drop-shadow(0 0 8px rgba(139,92,246,.6))}
+.cat span{font-size:10.5px;color:var(--tx2);font-weight:700}
+
+/* cards */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid .wcard{height:225px}
+.wcard{position:relative;border-radius:18px;overflow:hidden;border:1px solid var(--line);cursor:pointer;transition:.25s;background:#0b0b18}
+.wcard:active{transform:scale(.965)}
+.wcard.wide{width:255px;height:150px;flex:0 0 auto}
+.wcard img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
+.wgrad{position:absolute;inset:0}
+.wshade{position:absolute;inset:0;z-index:2;background:linear-gradient(to top,rgba(4,4,10,.9),transparent 55%)}
+.badges{position:absolute;top:8px;inset-inline-start:8px;z-index:4;display:flex;flex-direction:column;gap:5px;align-items:flex-start}
+.b4k{font-family:'Orbitron',sans-serif;font-size:8.5px;font-weight:800;background:var(--grad);padding:3px 7px;border-radius:6px;color:#fff;letter-spacing:.5px}
+.bnew{font-size:8px;font-weight:800;background:rgba(34,211,238,.18);border:1px solid rgba(34,211,238,.5);color:var(--cyan);padding:2.5px 7px;border-radius:6px;animation:pulse 1.6s infinite;letter-spacing:.5px}
+.heart-btn,.wdl{position:absolute;z-index:4;width:30px;height:30px;border-radius:99px;background:rgba(10,10,20,.55);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;color:#fff;cursor:pointer;transition:.2s}
+.heart-btn{top:8px;inset-inline-end:8px}
+.heart-btn.fav{color:var(--red);border-color:rgba(244,63,94,.55);box-shadow:0 0 12px rgba(244,63,94,.45)}
+.heart-btn:active,.wdl:active{transform:scale(.85)}
+.wdl{bottom:42px;inset-inline-end:8px;color:var(--cyan)}
+.wmeta{position:absolute;bottom:0;inset-inline:0;z-index:3;padding:10px}
+.wtitle{font-size:12.5px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wsub{font-size:10px;color:#b6b4cf;margin-top:2px}
+
+/* gradients */
+.g1{background:linear-gradient(135deg,#1e1b4b,#7c3aed 55%,#22d3ee)}
+.g2{background:linear-gradient(150deg,#0f172a,#f43f5e 60%,#fb923c)}
+.g3{background:linear-gradient(135deg,#111,#dc2626 70%,#7c3aed)}
+.g4{background:linear-gradient(140deg,#164e63,#22d3ee 55%,#a855f7)}
+.g5{background:linear-gradient(135deg,#052e16,#22c55e 60%,#0ea5e9)}
+.g6{background:linear-gradient(140deg,#4a044e,#ec4899 55%,#f59e0b)}
+
+/* search */
+.search-bar{display:flex;align-items:center;gap:9px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:0 14px;margin-top:10px;transition:.2s}
+.search-bar:focus-within{border-color:var(--p2);box-shadow:0 0 0 3px rgba(168,85,247,.15)}
+.sb-ic{color:var(--tx3)}
+.s-inp{flex:1;background:none;border:none;outline:none;color:var(--tx);font-family:inherit;font-size:13.5px;padding:14px 0;min-width:0}
+.s-inp::placeholder{color:var(--tx3)}
+.s-clear{background:none;border:none;color:var(--tx3);cursor:pointer;display:flex}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 4px}
+.chip{background:var(--panel);border:1px solid var(--line);color:var(--tx2);border-radius:12px;padding:9px 14px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;transition:.2s;display:inline-flex;align-items:center;gap:5px}
+.chip.on{background:linear-gradient(135deg,rgba(124,58,237,.4),rgba(236,72,153,.28));border-color:rgba(168,85,247,.55);color:#fff;box-shadow:0 0 14px rgba(139,92,246,.25)}
+.chip:active{transform:scale(.94)}
+.lbl{font-size:11.5px;color:var(--tx2);font-weight:800;margin:14px 0 2px;display:block}
+
+/* page head / empty */
+.page-head{display:flex;align-items:center;justify-content:space-between;margin:14px 2px}
+.page-head h2{font-size:19px;font-weight:900}
+.count{font-size:11px;color:var(--tx2);background:var(--panel);border:1px solid var(--line);padding:5px 11px;border-radius:99px}
+.empty{display:flex;flex-direction:column;align-items:center;text-align:center;padding:60px 20px;gap:6px}
+.empty-ic{font-size:52px;filter:drop-shadow(0 0 18px rgba(139,92,246,.5))}
+.empty p{font-weight:800;font-size:15px}
+.empty span{color:var(--tx2);font-size:12px;max-width:250px}
+
+/* daily */
+.daily-card{border-radius:24px;overflow:hidden;border:1px solid var(--line);background:var(--panel)}
+.dc-img{height:340px;position:relative}
+.dc-body{padding:16px;display:flex;flex-direction:column;gap:12px;align-items:stretch}
+.dc-body h3{font-size:17px}
+.countdown{margin-top:16px;text-align:center;background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:16px}
+.cd-lbl{font-size:11.5px;color:var(--tx2);font-weight:700;margin-bottom:10px}
+.cd-row{display:flex;justify-content:center;align-items:center;gap:8px}
+.cd-box{background:rgba(124,58,237,.15);border:1px solid rgba(168,85,247,.3);border-radius:14px;padding:8px 0;width:64px}
+.cd-box b{font-family:'Orbitron',sans-serif;font-size:20px;color:#c4b5fd;display:block}
+.cd-box span{font-size:9px;color:var(--tx2)}
+.cd-sep{font-family:'Orbitron',sans-serif;font-size:18px;color:var(--p2)}
+
+/* detail */
+.detail{position:absolute;inset:0;background:#05050d;z-index:60;animation:fade .3s}
+.d-grad{position:absolute;inset:0}
+.d-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
+.d-shade{position:absolute;inset:0;z-index:2;background:linear-gradient(to bottom,rgba(4,4,10,.55),transparent 28%,transparent 52%,rgba(4,4,10,.94) 85%);pointer-events:none}
+.d-top{position:absolute;top:0;inset-inline:0;z-index:5;display:flex;justify-content:space-between;padding:14px 16px}
+.d-top>div{display:flex;gap:8px}
+.d-sheet{position:absolute;bottom:0;inset-inline:0;z-index:5;padding:10px 16px calc(20px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:12px}
+.d-title-row{display:flex;align-items:center;gap:10px}
+.d-title-row h3{font-size:19px;flex:1;text-shadow:0 2px 12px rgba(0,0,0,.6)}
+.dmeta{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.dcell{background:rgba(14,14,28,.72);backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:14px;padding:9px 4px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:3px}
+.dcell b{font-size:10.5px;font-weight:800;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dcell span{font-size:8px;color:var(--tx2)}
+
+/* buttons / inputs */
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;border:none;border-radius:16px;font-family:inherit;font-size:14px;font-weight:800;cursor:pointer;transition:.2s}
+.btn:active{transform:scale(.97)}
+.btn:disabled{opacity:.6;cursor:wait}
+.btn-grad{background:var(--grad);color:#fff;box-shadow:0 8px 26px rgba(139,92,246,.45)}
+.btn-ghost{background:var(--panel);border:1px solid var(--line);color:var(--tx)}
+.inp{width:100%;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 14px;color:var(--tx);font-family:inherit;font-size:13px;outline:none;transition:.2s}
+.inp:focus{border-color:var(--p2);box-shadow:0 0 0 3px rgba(168,85,247,.15)}
+.inp.code{text-align:center;font-family:'Orbitron',sans-serif;letter-spacing:6px;font-size:16px}
+.cy{color:var(--cyan)}.gold{color:var(--gold)}
+
+/* bottom nav */
+.bnav{display:flex;border-top:1px solid var(--line);background:rgba(10,10,20,.88);backdrop-filter:blur(14px);padding:8px 6px calc(10px + env(safe-area-inset-bottom));z-index:6}
+.bnav button{flex:1;background:none;border:none;color:var(--tx3);display:flex;flex-direction:column;align-items:center;gap:3px;font-size:9px;font-weight:800;font-family:inherit;cursor:pointer;position:relative;transition:.2s;white-space:nowrap;padding-top:4px}
+.bnav button.on{color:var(--p2)}
+.bnav button.on .ic{filter:drop-shadow(0 0 10px rgba(168,85,247,.85))}
+.bnav button.on::before{content:'';position:absolute;top:-9px;width:32px;height:3px;border-radius:99px;background:var(--grad)}
+
+/* overlays */
+.ov{position:absolute;inset:0;z-index:50;display:flex;background:rgba(3,3,8,.7);backdrop-filter:blur(8px);animation:fade .25s}
+.sheet{position:relative;margin-top:auto;width:100%;max-height:80%;overflow-y:auto;background:#101020;border:1px solid var(--line);border-bottom:none;border-radius:24px 24px 0 0;padding:18px 18px calc(22px + env(safe-area-inset-bottom));animation:up .32s cubic-bezier(.2,.9,.3,1.1)}
+.sheet-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.sheet-head h4{font-size:15px}
+.modal{position:relative;margin:auto;width:86%;max-width:330px;background:rgba(18,18,31,.96);border:1px solid rgba(168,85,247,.35);border-radius:24px;padding:26px 22px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.6),0 0 40px rgba(124,58,237,.2);animation:pop .3s cubic-bezier(.2,1.2,.4,1)}
+.modal-ic{width:58px;height:58px;margin:0 auto 12px;border-radius:18px;background:linear-gradient(135deg,rgba(124,58,237,.25),rgba(34,211,238,.15));border:1px solid rgba(168,85,247,.4);display:flex;align-items:center;justify-content:center}
+.modal h3{font-size:17px}
+.modal-sub{color:var(--tx2);font-size:12px;margin:6px 0 16px}
+.modal .btn{margin-top:14px}
+.err-t{color:var(--red);font-size:11.5px;font-weight:800;margin-top:10px}
+.hint{color:var(--tx3);font-size:10.5px;margin-top:12px}
+.shake{animation:shake .45s}
+
+/* drawer */
+.drawer-wrap{position:absolute;inset:0;z-index:40}
+.drawer{position:absolute;inset-block:0;inset-inline-start:0;width:80%;max-width:310px;background:rgba(11,11,22,.97);border-inline-end:1px solid var(--line);padding:22px 16px 16px;display:flex;flex-direction:column;animation:slideIn .3s cubic-bezier(.2,.9,.3,1);--slide:-40px}
+[dir="rtl"] .drawer{--slide:40px}
+.drawer-logo{display:flex;align-items:baseline;gap:8px;margin-bottom:18px;padding-inline-start:4px}
+.dver{font-size:10px;color:var(--tx3);font-weight:700}
+.drow{display:flex;align-items:center;gap:12px;width:100%;background:none;border:none;color:var(--tx);font-family:inherit;font-size:13.5px;font-weight:700;padding:11px 6px;border-radius:12px;cursor:pointer;text-align:start;transition:.15s}
+.drow:active{background:var(--panel)}
+.dric{width:34px;height:34px;border-radius:11px;background:rgba(124,58,237,.13);border:1px solid rgba(168,85,247,.25);color:#c4b5fd;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.drow.admin .dric{background:rgba(251,191,36,.1);border-color:rgba(251,191,36,.3);color:var(--gold)}
+.dspacer{flex:1}
+.dver2{font-size:9.5px;color:var(--tx3);text-align:center;padding-top:12px}
+
+/* profile */
+.phead{display:flex;flex-direction:column;align-items:center;padding:22px 0 8px;gap:9px}
+.pavatar{width:78px;height:78px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:34px;box-shadow:0 0 34px rgba(139,92,246,.5);border:3px solid rgba(255,255,255,.15)}
+.pname{font-size:17px;font-weight:900;display:flex;align-items:center;gap:8px}
+.pemail{font-size:11px;color:var(--tx2);direction:ltr}
+.pstats{display:flex;width:100%;background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:14px 0;margin-top:10px}
+.pstat{flex:1;text-align:center;cursor:pointer}
+.pstat+.pstat{border-inline-start:1px solid var(--line)}
+.pstat b{font-size:17px;font-family:'Orbitron',sans-serif;color:#e9e4ff}
+.pstat span{display:block;font-size:9.5px;color:var(--tx2);margin-top:3px}
+.mlist{margin-top:12px}
+.mrow{display:flex;align-items:center;gap:12px;padding:13px 2px;border-bottom:1px solid var(--line);cursor:pointer;transition:.15s;width:100%;background:none;border-top:none;border-inline:none;color:var(--tx);font-family:inherit}
+.mrow:active{opacity:.65}
+.mrow:last-child{border-bottom:none}
+.mric{width:36px;height:36px;border-radius:12px;background:rgba(124,58,237,.14);border:1px solid rgba(168,85,247,.25);color:#c4b5fd;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.mrow.gold .mric{background:rgba(251,191,36,.1);border-color:rgba(251,191,36,.3);color:var(--gold)}
+.mrow.red .mlbl,.mrow.red .mric{color:var(--red)}
+.mrow.red .mric{background:rgba(244,63,94,.12);border-color:rgba(244,63,94,.3)}
+.mlbl{flex:1;font-size:13px;font-weight:800;text-align:start}
+.chev{color:var(--tx3)}
+.sw{width:44px;height:25px;border-radius:99px;background:var(--panel2);border:1px solid var(--line);position:relative;transition:.25s;flex:0 0 auto}
+.sw.on{background:linear-gradient(135deg,#7c3aed,#a855f7);border-color:transparent;box-shadow:0 0 12px rgba(139,92,246,.5)}
+.sw .knob{position:absolute;top:2.5px;inset-inline-start:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:.25s}
+.sw.on .knob{inset-inline-start:21.5px}
+.pill{font-size:10px;background:rgba(168,85,247,.15);color:#c4b5fd;border:1px solid rgba(168,85,247,.35);padding:3px 9px;border-radius:99px;font-weight:800}
+.pill.mini{font-size:8.5px;color:var(--cyan);border-color:rgba(34,211,238,.4);background:rgba(34,211,238,.08)}
+.dlrow{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+.dlrow:last-child{border-bottom:none}
+.dlrow img{width:46px;height:62px;border-radius:10px;object-fit:cover;background:var(--panel2)}
+.dlmeta{flex:1;min-width:0}
+.dlmeta b{display:block;font-size:12.5px}
+.dlmeta span{font-size:10px;color:var(--tx2)}
+
+/* admin panel */
+.ap{position:absolute;inset:0;z-index:55;background:var(--bg);display:flex;flex-direction:column;animation:fade .3s}
+.ap-head{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line);background:rgba(10,10,22,.85);backdrop-filter:blur(10px)}
+.ap-crown{width:40px;height:40px;border-radius:14px;background:linear-gradient(135deg,#f59e0b,#ec4899);display:flex;align-items:center;justify-content:center;color:#fff;box-shadow:0 0 18px rgba(236,72,153,.4);flex:0 0 auto}
+.ap-tt{display:flex;flex-direction:column;gap:1px}
+.ap-tt b{font-size:14px}
+.ap-tt span{font-size:10px;color:var(--gold);font-weight:700}
+.live{margin-inline-start:auto;display:flex;align-items:center;gap:5px;font-size:9.5px;font-weight:800;color:var(--cyan);border:1px solid rgba(34,211,238,.4);background:rgba(34,211,238,.08);padding:5px 9px;border-radius:99px}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--cyan);animation:pulse 1.2s infinite}
+.ap-body{flex:1;overflow-y:auto;padding:16px;scrollbar-width:none}
+.ap-body::-webkit-scrollbar{display:none}
+.ap-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.apstat{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:12px;text-align:center}
+.apstat b{font-size:18px;font-family:'Orbitron',sans-serif}
+.apstat span{display:block;font-size:9px;color:var(--tx2);margin-top:3px}
+.ap-card{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:16px;margin-bottom:16px}
+.ap-card-t{display:flex;align-items:center;gap:8px;font-weight:900;font-size:13.5px;margin-bottom:4px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.or{text-align:center;color:var(--tx3);font-size:11px;margin:14px 0 10px;letter-spacing:1px}
+.filezone{display:flex;flex-direction:column;align-items:center;gap:8px;border:2px dashed rgba(168,85,247,.4);border-radius:16px;padding:18px;color:var(--tx2);font-size:12px;font-weight:700;cursor:pointer;background:rgba(168,85,247,.05);text-align:center;word-break:break-all}
+.filezone:hover{background:rgba(168,85,247,.1)}
+.preview{margin-top:12px;position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--line)}
+.preview img{width:100%;height:180px;object-fit:cover;display:block}
+.preview-lbl{position:absolute;bottom:8px;inset-inline-start:8px;background:rgba(5,5,12,.75);padding:4px 10px;border-radius:99px;font-size:10px;color:#4ade80;font-weight:800}
+.mlist{max-height:320px;overflow-y:auto}
+.mrow2{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}
+.mrow2:last-child{border-bottom:none}
+.mthumb{width:42px;height:42px;border-radius:10px;object-fit:cover;background:var(--panel2);flex:0 0 auto}
+.mmeta{flex:1;min-width:0}
+.mmeta b{display:block;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mmeta span{font-size:10px;color:var(--tx2)}
+
+/* toast */
+.toast{position:absolute;bottom:92px;left:0;right:0;margin:auto;width:max-content;max-width:85%;z-index:90;background:rgba(22,22,40,.96);border:1px solid rgba(168,85,247,.45);box-shadow:0 8px 30px rgba(124,58,237,.35);padding:11px 18px;border-radius:999px;font-size:12.5px;font-weight:800;text-align:center;animation:tIn .25s ease both,tOut .3s ease 2.05s forwards}
+
+/* rtl flips */
+[dir="rtl"] .flip,[dir="rtl"] .chev{transform:scaleX(-1)}
+
+@keyframes fade{from{opacity:0}}
+@keyframes up{from{transform:translateY(60px);opacity:0}}
+@keyframes pop{from{transform:scale(.85);opacity:0}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+@keyframes pulse{50%{opacity:.35}}
+@keyframes tIn{from{transform:translateY(20px);opacity:0}}
+@keyframes tOut{to{opacity:0;transform:translateY(10px)}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const {useState,useEffect,useRef,useMemo} = React;
+
+/* ============ helpers ============ */
+const store={
+  get(k,d){try{const v=localStorage.getItem(k);return v!==null?JSON.parse(v):d}catch(e){return d}},
+  set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+};
+const uid=()=>'u'+Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const fmt=n=>{if(typeof n!=='number')return String(n||0);return n>=1000?((Math.round(n/100)/10)+'K').replace('.0K','K'):String(n)};
+const dailyPick=wps=>{if(!wps.length)return null;const d=new Date();const doy=Math.floor((d-new Date(d.getFullYear(),0,0))/864e5);return wps[doy%wps.length];};
+
+/* ============ i18n ============ */
+const I18N={
+en:{
+ langName:'English',dir:'ltr',
+ nav:{home:'Home',search:'Search',favorites:'Favorites',daily:'Daily',profile:'Profile'},
+ hero:{badge:'⚡ PREMIUM COLLECTION',title:'ANIME WALLS',title2:'FULL POWER',sub:'Ultra HD wallpapers for true Otakus',cta:'Explore Now'},
+ home:{categories:'Categories',popular:'Most Popular',weekly:'🔥 New This Week',daily:'Daily Wallpaper',viewAll:'View All',dailyCta:'Grab it now →'},
+ search:{placeholder:'Search anime or wallpaper...',popular:'Popular Searches',tags:'Filter by Style',results:'Results',none:'No wallpapers found',noneSub:'Try another name or tag',
+  chips:['Naruto','Luffy','Gojo','Satoru','Demon Slayer','One Piece']},
+ fav:{title:'My Favorites',count:n=>n+' wallpapers',empty:'No favorites yet',emptySub:'Tap the ♥ on any wallpaper to save it here',cta:'Explore Wallpapers'},
+ daily:{title:'Daily Wallpaper',today:"TODAY'S PICK",refresh:'New wallpaper in',claim:"Download Today's Wallpaper",h:'HRS',m:'MIN',s:'SEC'},
+ profile:{title:'Profile',name:'Anime Lover',email:'anime.lover@aniwalls.app',edit:'Edit Name',downloads:'Downloads',favorites:'Favorites',likes:'Likes',adminBadge:'ADMIN',
+  menu:{myDownloads:'My Downloads',myFavs:'My Favorites',language:'App Language',night:'Night Mode',share:'Share App',rate:'Rate & Feedback',about:'About AniWalls',admin:'Admin Panel',logout:'Log Out'}},
+ detail:{download:'Download Wallpaper',share:'Share Wallpaper',res:'Resolution',anime:'Anime',dls:'Downloads',rating:'Rating',downloading:'Preparing...',
+  downloadOk:'Wallpaper downloaded successfully! ✔',downloadTry:'Image opened — long-press to save',shared:'Link copied to clipboard!'},
+ admin:{title:'Admin Panel',welcome:'Welcome back, Mido 👑',passcode:'Enter the secret passcode',unlock:'Unlock',wrong:'Wrong passcode! Try again',hint:'Only Mido knows it 😉',
+  logout:'Log Out',stats:{total:'Wallpapers',mine:'Your Uploads',dls:'Total Downloads'},
+  upload:'Upload New Wallpaper',titleEn:'Title (English)',titleAr:'Title (Arabic)',anime:'Anime / Series',cat:'Category',res:'Resolution',styleTag:'Style Tag',
+  url:'Image URL',or:'— or upload a file —',choose:'Choose image from device',publish:'⚡ Publish Wallpaper',need:'Title and an image are required!',
+  published:'Wallpaper published — LIVE for everyone! 🎉',urlBad:'That URL did not load. Check it and try again.',preview:'Preview ready',
+  manage:'Manage Wallpapers',delConfirm:'Delete this wallpaper permanently?',deleted:'Wallpaper deleted'},
+ drawer:{home:'Home',search:'Search',favs:'Favorites',daily:'Daily Wallpaper',sections:'Sections',settings:'Settings',share:'Share & Rate',more:'More Options',admin:'🔒 Admin Access',ver:'AniWalls v2.0 • crafted by Mido'},
+ cat:{naruto:'Naruto',onepiece:'One Piece',demonslayer:'Demon Slayer',jjk:'Jujutsu Kaisen',aot:'Attack on Titan',dball:'Dragon Ball'},
+ tag:{all:'All',neon:'Neon',portrait:'Portrait',action:'Action',dark:'Dark',nature:'Nature'},
+ toast:{favAdd:'Added to Favorites ❤️',favRemove:'Removed from Favorites',adminIn:'Admin mode unlocked — welcome Mido! 👑',adminOut:'Admin logged out',copied:'Copied to clipboard!',nameSaved:'Name updated! ✔',bye:'See you soon, Otaku! 👋',rate:'Thanks for the 5 stars! ⭐'},
+ about:{title:'About AniWalls',body:'AniWalls is a futuristic anime wallpaper experience crafted by Mido. Discover, favorite and download ultra-HD wallpapers — refreshed daily with live admin sync.'},
+ save:'Save',cancel:'Cancel',dlEmpty:'No downloads yet',
+},
+ar:{
+ langName:'العربية',dir:'rtl',
+ nav:{home:'الرئيسية',search:'بحث',favorites:'المفضلة',daily:'خلفية اليوم',profile:'الملف الشخصي'},
+ hero:{badge:'⚡ مجموعة مميزة',title:'خلفيات أنمي',title2:'بدقة عالية',sub:'اكتشف أفضل الخلفيات لعشاق الأنمي',cta:'استكشف الآن'},
+ home:{categories:'التصنيفات',popular:'الأكثر رواجاً',weekly:'🔥 جديد هذا الأسبوع',daily:'خلفية اليوم',viewAll:'عرض الكل',dailyCta:'احصل عليها الآن ←'},
+ search:{placeholder:'ابحث عن أنمي أو خلفية...',popular:'الكلمات الشائعة',tags:'تصفية حسب النمط',results:'النتائج',none:'لا توجد خلفيات مطابقة',noneSub:'جرّب اسماً أو وسم آخر',
+  chips:['ناروتو','لوفي','غوجو','ساتورو','قاتل الشياطين','ون بيس']},
+ fav:{title:'المفضلة',count:n=>n+' خلفية',empty:'لا توجد مفضلات بعد',emptySub:'اضغط على ♥ في أي خلفية لحفظها هنا',cta:'استكشف الخلفيات'},
+ daily:{title:'خلفية اليوم',today:'اختيار اليوم',refresh:'خلفية جديدة بعد',claim:'تحميل خلفية اليوم',h:'ساعة',m:'دقيقة',s:'ثانية'},
+ profile:{title:'الملف الشخصي',name:'عاشق أنمي',email:'anime.lover@aniwalls.app',edit:'تعديل الاسم',downloads:'تحميل',favorites:'مفضلة',likes:'إعجاب',adminBadge:'مشرف',
+  menu:{myDownloads:'تنزيلاتي',myFavs:'المفضلات',language:'لغة التطبيق',night:'الوضع الليلي',share:'مشاركة التطبيق',rate:'قيّم التطبيق',about:'حول AniWalls',admin:'لوحة المشرف',logout:'تسجيل الخروج'}},
+ detail:{download:'تحميل الخلفية',share:'مشاركة الخلفية',res:'الدقة',anime:'الأنمي',dls:'التحميلات',rating:'التقييم',downloading:'جاري التحضير...',
+  downloadOk:'تم تحميل الخلفية بنجاح! ✔',downloadTry:'تم فتح الصورة — اضغط مطولاً لحفظها',shared:'تم نسخ الرابط!'},
+ admin:{title:'لوحة المشرف',welcome:'مرحباً بعودتك، ميدو 👑',passcode:'أدخل الرمز السري',unlock:'فتح القفل',wrong:'رمز خاطئ! حاول مجدداً',hint:'ميدو وحده يعرفه 😉',
+  logout:'تسجيل الخروج',stats:{total:'خلفية',mine:'إضافاتك',dls:'إجمالي التحميلات'},
+  upload:'إضافة خلفية جديدة',titleEn:'العنوان (إنجليزي)',titleAr:'العنوان (عربي)',anime:'الأنمي / السلسلة',cat:'التصنيف',res:'الدقة',styleTag:'النمط',
+  url:'رابط الصورة',or:'— أو ارفع ملفاً من جهازك —',choose:'اختر صورة من الجهاز',publish:'⚡ نشر الخلفية',need:'العنوان والصورة مطلوبان!',
+  published:'تم نشر الخلفية — ظاهرة الآن للجميع مباشرة! 🎉',urlBad:'الرابط لا يعمل، تحقق منه وأعد المحاولة',preview:'المعاينة جاهزة',
+  manage:'إدارة الخلفيات',delConfirm:'حذف هذه الخلفية نهائياً؟',deleted:'تم حذف الخلفية'},
+ drawer:{home:'الرئيسية',search:'بحث',favs:'المفضلة',daily:'خلفية اليوم',sections:'الأقسام',settings:'الإعدادات',share:'المشاركة والتقييم',more:'مزيد من الخيارات',admin:'🔒 دخول المشرف',ver:'AniWalls v2.0 • صنع بواسطة ميدو'},
+ cat:{naruto:'ناروتو',onepiece:'ون بيس',demonslayer:'قاتل الشياطين',jjk:'جوجوتسو كايسن',aot:'هجوم العمالقة',dball:'دراغون بول'},
+ tag:{all:'الكل',neon:'نيون',portrait:'بورتريه',action:'أكشن',dark:'داكن',nature:'طبيعة'},
+ toast:{favAdd:'أُضيفت إلى المفضلة ❤️',favRemove:'أُزيلت من المفضلة',adminIn:'تم فتح وضع المشرف — أهلاً ميدو! 👑',adminOut:'تم تسجيل خروج المشرف',copied:'تم النسخ!',nameSaved:'تم تحديث الاسم! ✔',bye:'إلى اللقاء أيها الأوتاكو! 👋',rate:'شكراً على التقييم! ⭐'},
+ about:{title:'حول AniWalls',body:'AniWalls تجربة خلفيات أنمي مستقبلية من صناعة ميدو. اكتشف وحمّل خلفيات فائقة الدقة — تتجدد يومياً مع مزامنة مباشرة من المشرف.'},
+ save:'حفظ',cancel:'إلغاء',dlEmpty:'لا توجد تنزيلات بعد',
+}};
+
+/* ============ data ============ */
+const P='https://picsum.photos/seed/';
+const SEED=[
+ {id:'w1', ten:'Goku Ultra Instinct',tar:'غوكو - الغريزة الفائقة',anime:'Dragon Ball',cat:'dball',tags:['neon','action'],res:'2360 x 3840',is4k:1,rate:'4.9',likes:'12.5K',dls:48210,featured:1,grad:'g4',img:P+'aw-goku/720/1280'},
+ {id:'w2', ten:'Kakashi Hatake',tar:'كاكاشي هاتاكي',anime:'Naruto',cat:'naruto',tags:['portrait','action'],res:'2160 x 3840',is4k:1,rate:'4.8',likes:'9.8K',dls:39540,featured:1,grad:'g1',img:P+'aw-kakashi/720/1280'},
+ {id:'w3', ten:'Itachi Uchiha',tar:'إيتاشي أوتشيها',anime:'Naruto',cat:'naruto',tags:['dark','portrait'],res:'2160 x 3840',is4k:1,rate:'4.9',likes:'11.2K',dls:44120,featured:1,grad:'g3',img:P+'aw-itachi/720/1280'},
+ {id:'w4', ten:'Satoru Gojo',tar:'ساتورو غوجو',anime:'Jujutsu Kaisen',cat:'jjk',tags:['neon','portrait'],res:'2160 x 3840',is4k:1,rate:'4.9',likes:'15.3K',dls:52030,featured:1,grad:'g4',img:P+'aw-gojo/720/1280'},
+ {id:'w5', ten:'Eren Yeager',tar:'إيرين ييغر',anime:'Attack on Titan',cat:'aot',tags:['dark','action'],res:'2160 x 3840',is4k:1,rate:'4.7',likes:'10.9K',dls:41800,grad:'g2',img:P+'aw-eren/720/1280'},
+ {id:'w6', ten:'Levi Ackerman',tar:'ليفي أكيرمان',anime:'Attack on Titan',cat:'aot',tags:['action','dark'],res:'1440 x 2560',is4k:0,rate:'4.6',likes:'8.4K',dls:31200,grad:'g3',img:P+'aw-levi/720/1280'},
+ {id:'w7', ten:'Naruto Uzumaki',tar:'ناروتو أوزوماكي',anime:'Naruto',cat:'naruto',tags:['action','neon'],res:'2160 x 3840',is4k:1,rate:'4.8',likes:'13.7K',dls:47500,featured:1,grad:'g5',img:P+'aw-naruto/720/1280'},
+ {id:'w8', ten:'Luffy Gear 5',tar:'لوفي - الجير الخامس',anime:'One Piece',cat:'onepiece',tags:['neon','action'],res:'2360 x 3840',is4k:1,rate:'5.0',likes:'16.8K',dls:55300,featured:1,grad:'g6',img:P+'aw-luffy/720/1280'},
+ {id:'w9', ten:'Tanjiro Kamado',tar:'تانجيرو كامادو',anime:'Demon Slayer',cat:'demonslayer',tags:['nature','action'],res:'1440 x 2560',is4k:0,rate:'4.7',likes:'9.1K',dls:36400,grad:'g5',img:P+'aw-tanjiro/720/1280'},
+ {id:'w10',ten:'Nezuko Kamado',tar:'نيزوكو كامادو',anime:'Demon Slayer',cat:'demonslayer',tags:['portrait','dark'],res:'2160 x 3840',is4k:1,rate:'4.8',likes:'10.2K',dls:38900,grad:'g6',img:P+'aw-nezuko/720/1280'},
+ {id:'w11',ten:'Vegeta Ultra Ego',tar:'فيجيتا - الأنا الفائقة',anime:'Dragon Ball',cat:'dball',tags:['neon','dark'],res:'2160 x 3840',is4k:1,rate:'4.8',likes:'11.6K',dls:42700,grad:'g2',img:P+'aw-vegeta/720/1280'},
+ {id:'w12',ten:'Kyojuro Rengoku',tar:'كيوجورو رينغوكو',anime:'Demon Slayer',cat:'demonslayer',tags:['neon','action'],res:'1440 x 2560',is4k:0,rate:'4.9',likes:'12.1K',dls:45600,grad:'g2',img:P+'aw-rengoku/720/1280'},
+ {id:'w13',ten:'Roronoa Zoro',tar:'زورو رورونوا',anime:'One Piece',cat:'onepiece',tags:['action','dark'],res:'2160 x 3840',is4k:1,rate:'4.8',likes:'10.8K',dls:40100,grad:'g5',img:P+'aw-zoro/720/1280'},
+ {id:'w14',ten:'Sasuke Uchiha',tar:'ساسكي أوتشيها',anime:'Naruto',cat:'naruto',tags:['dark','portrait'],res:'1440 x 2560',is4k:0,rate:'4.6',likes:'7.9K',dls:29800,grad:'g3',img:P+'aw-sasuke/720/1280'},
+ {id:'w15',ten:'Gojo Void Expansion',tar:'غوجو - توسعة الفراغ',anime:'Jujutsu Kaisen',cat:'jjk',tags:['neon'],res:'2160 x 3840',is4k:1,rate:'4.9',likes:'8.2K',dls:21400,isNew:1,grad:'g4',img:P+'aw-void/720/1280'},
+ {id:'w16',ten:'Luffy Sun God Nika',tar:'لوفي إله الشمس نيكا',anime:'One Piece',cat:'onepiece',tags:['neon','action'],res:'2360 x 3840',is4k:1,rate:'4.9',likes:'9.4K',dls:24800,isNew:1,grad:'g6',img:P+'aw-nika/720/1280'},
+ {id:'w17',ten:'Dance of the Fire God',tar:'رقصة إله النار',anime:'Demon Slayer',cat:'demonslayer',tags:['neon','action'],res:'2160 x 3840',is4k:1,rate:'4.8',likes:'7.7K',dls:19600,isNew:1,grad:'g2',img:P+'aw-hinokami/720/1280'},
+];
+const CATS=[{k:'naruto',em:'🍥'},{k:'onepiece',em:'🏴‍☠️'},{k:'demonslayer',em:'⚔️'},{k:'jjk',em:'🌀'},{k:'aot',em:'🛡️'},{k:'dball',em:'🐉'}];
+const TAGS=[{k:'all',em:'✨'},{k:'neon',em:'🔥'},{k:'portrait',em:'🖼️'},{k:'action',em:'⚡'},{k:'dark',em:'🌙'},{k:'nature',em:'🌿'}];
+const NAV=[{k:'home',i:'home'},{k:'search',i:'search'},{k:'favorites',i:'heart'},{k:'daily',i:'calendar'},{k:'profile',i:'user'}];
+const ADMIN_PASS='15081983';
+
+/* ============ icon ============ */
+function Ic({n,s=20,c='',fill=false}){
+ const P={
+  menu:<g><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="13" y2="17"/></g>,
+  home:<g><path d="M3 11l9-8 9 8"/><path d="M5 9.5V21h14V9.5"/><path d="M10 21v-6h4v6"/></g>,
+  search:<g><circle cx="11" cy="11" r="7"/><line x1="20.5" y1="20.5" x2="16.2" y2="16.2"/></g>,
+  heart:<path d="M12 20.5C7.2 17 3 13.6 3 9.4 3 6.6 5.1 4.6 7.7 4.6c1.8 0 3.4 1 4.3 2.6.9-1.6 2.5-2.6 4.3-2.6 2.6 0 4.7 2 4.7 4.8 0 4.2-4.2 7.6-9 11.1z"/>,
+  calendar:<g><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="16" y1="3" x2="16" y2="7"/><line x1="3.5" y1="10" x2="20.5" y2="10"/></g>,
+  user:<g><circle cx="12" cy="8" r="4"/><path d="M4.5 21c1.4-3.8 4.6-5.5 7.5-5.5s6.1 1.7 7.5 5.5"/></g>,
+  download:<g><path d="M12 3.5v11.5"/><path d="M7 10.5l5 5 5-5"/><path d="M4.5 20.5h15"/></g>,
+  share:<g><circle cx="6" cy="12" r="2.7"/><circle cx="18" cy="5.5" r="2.7"/><circle cx="18" cy="18.5" r="2.7"/><line x1="8.4" y1="10.8" x2="15.6" y2="7"/><line x1="8.4" y1="13.2" x2="15.6" y2="17"/></g>,
+  back:<polyline points="14.5 6 8.5 12 14.5 18"/>,
+  chev:<polyline points="9.5 6 15.5 12 9.5 18"/>,
+  globe:<g><circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><path d="M12 3a13.5 13.5 0 010 18M12 3a13.5 13.5 0 000 18"/></g>,
+  moon:<path d="M20 13.6A8.4 8.4 0 1110.4 4a6.8 6.8 0 009.6 9.6z"/>,
+  gear:<g><circle cx="12" cy="12" r="3.2"/><path d="M12 2.8v2.7M12 18.5v2.7M2.8 12h2.7M18.5 12h2.7M5.5 5.5l1.9 1.9M16.6 16.6l1.9 1.9M18.5 5.5l-1.9 1.9M7.4 16.6l-1.9 1.9"/></g>,
+  star:<path d="M12 3.2l2.7 5.5 6 .9-4.4 4.2 1.1 6-5.4-2.9-5.4 2.9 1.1-6L3.3 9.6l6-.9z"/>,
+  x:<g><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></g>,
+  upload:<g><path d="M4.5 20.5h15"/><path d="M12 16V4"/><path d="M7 9l5-5 5 5"/></g>,
+  trash:<g><path d="M4 7h16"/><path d="M9.5 7V4.5h5V7"/><path d="M6.5 7l1 13.5h9l1-13.5"/><line x1="10" y1="11" x2="10" y2="16.5"/><line x1="14" y1="11" x2="14" y2="16.5"/></g>,
+  image:<g><rect x="3.5" y="4.5" width="17" height="15" rx="3"/><circle cx="9" cy="9.5" r="1.7"/><path d="M4.5 17l4.5-3.5 3.5 2.5 3-2.5 4 3"/></g>,
+  check:<polyline points="5 12.5 10 17.5 19 7.5"/>,
+  info:<g><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16.5"/><line x1="12" y1="7.5" x2="12" y2="7.51"/></g>,
+  grid:<g><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></g>,
+  lock:<g><rect x="5" y="10.5" width="14" height="9.5" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 018 0v3"/></g>,
+  zap:<path d="M13 2.5L4.5 13.5H11L10 21.5l8.5-11H12z"/>,
+  logout:<g><path d="M9.5 4H6.5A2.5 2.5 0 004 6.5v11A2.5 2.5 0 006.5 20h3"/><polyline points="14 8 18 12 14 16"/><line x1="18" y1="12" x2="9.5" y2="12"/></g>,
+  crown:<g fill="currentColor" stroke="none"><path d="M3 16.5L2.2 7.2l5.3 3.8L12 4l4.5 7 5.3-3.8-.8 9.3z"/><rect x="3.5" y="18" width="17" height="2.6" rx="1.3"/></g>,
+ };
+ return <svg className={'ic '+(c||'')} width={s} height={s} viewBox="0 0 24 24" fill={fill?'currentColor':'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">{P[n]}</svg>;
+}
+
+/* ============ small pieces ============ */
+function SectionHead({title,onMore,moreLabel}){
+ return <div className="sec"><h3>{title}</h3>{onMore&&<span className="more" onClick={onMore}>{moreLabel||'···'}</span>}</div>;
+}
+function CardMedia({w}){
+ return <React.Fragment>
+  <div className={'wgrad '+w.grad}/>
+  <img loading="lazy" src={w.img} alt={w.ten} onError={e=>{e.target.style.display='none'}}/>
+  <div className="wshade"/>
+ </React.Fragment>;
+}
+function WallCard({w,lang,t,fav,onFav,onOpen,onDl,wide}){
+ return <div className={'wcard'+(wide?' wide':'')} onClick={()=>onOpen(w)}>
+  <CardMedia w={w}/>
+  <div className="badges">
+   {w.is4k?<span className="b4k">4K</span>:null}
+   {(w.isNew||w.mine)?<span className="bnew">● LIVE</span>:null}
+  </div>
+  <button className={'heart-btn'+(fav?' fav':'')} onClick={e=>{e.stopPropagation();onFav(w)}}>
+   <Ic n="heart" s={14} fill={fav}/>
+  </button>
+  <button className="wdl" onClick={e=>{e.stopPropagation();onDl(w)}}><Ic n="download" s={14}/></button>
+  <div className="wmeta">
+   <div className="wtitle">{lang==='ar'?w.tar:w.ten}</div>
+   <div className="wsub">{lang==='ar'?(t.cat[w.cat]||w.anime):w.anime}</div>
+  </div>
+ </div>;
+}
+function Sheet({title,onClose,children}){
+ return <div className="ov" onClick={onClose}>
+  <div className="sheet" onClick={e=>e.stopPropagation()}>
+   <div className="sheet-head"><h4>{title}</h4><button className="icon-btn sm" onClick={onClose}><Ic n="x" s={14}/></button></div>
+   {children}
+  </div>
+ </div>;
+}
+
+/* ============ header / nav / drawer ============ */
+function Header({t,lang,onMenu,onLang,onCrown}){
+ return <header className="hdr">
+  <button className="icon-btn" onClick={onMenu}><Ic n="menu" s={19}/></button>
+  <span className="logo">AniWalls</span>
+  <button className="lang-btn" onClick={onLang}><Ic n="globe" s={14}/>{lang==='en'?'ع':'EN'}</button>
+  <button className="icon-btn crown-btn" onClick={onCrown}><Ic n="crown" s={18}/></button>
+ </header>;
+}
+function BottomNav({t,page,go}){
+ return <nav className="bnav">
+  {NAV.map(n=>(
+   <button key={n.k} className={page===n.k?'on':''} onClick={()=>go(n.k)}>
+    <Ic n={n.i} s={21}/><span>{t.nav[n.k]}</span>
+   </button>
+  ))}
+ </nav>;
+}
+function Drawer({t,onClose,go,shareApp,adminAction,onAbout}){
+ const items=[
+  {i:'home',l:t.drawer.home,fn:()=>go('home')},
+  {i:'search',l:t.drawer.search,fn:()=>go('search')},
+  {i:'heart',l:t.drawer.favs,fn:()=>go('favorites')},
+  {i:'calendar',l:t.drawer.daily,fn:()=>go('daily')},
+  {i:'grid',l:t.drawer.sections,fn:()=>go('search')},
+  {i:'gear',l:t.drawer.settings,fn:()=>go('profile')},
+  {i:'share',l:t.drawer.share,fn:shareApp},
+  {i:'info',l:t.drawer.more,fn:onAbout},
+ ];
+ return <div className="drawer-wrap" onClick={onClose}>
+  <div className="drawer" onClick={e=>e.stopPropagation()}>
+   <div className="drawer-logo"><span className="logo" style={{marginInlineEnd:0}}>AniWalls</span><span className="dver">v2.0</span></div>
+   {items.map(it=>(
+    <button key={it.l} className="drow" onClick={()=>{it.fn();}}>
+     <span className="dric"><Ic n={it.i} s={16}/></span>{it.l}
+    </button>
+   ))}
+   <div className="dspacer"/>
+   <button className="drow admin" onClick={adminAction}>
+    <span className="dric"><Ic n="lock" s={16}/></span>{t.drawer.admin}
+   </button>
+   <div className="dver2">{t.drawer.ver}</div>
+  </div>
+ </div>;
+}
+
+/* ============ pages ============ */
+function HomePage({t,lang,wps,openDetail,toggleFav,isFav,download,go,setCatFilter}){
+ const featured=wps.filter(w=>w.featured);
+ const [hi,setHi]=useState(0);
+ useEffect(()=>{
+  if(featured.length<2)return;
+  const i=setInterval(()=>setHi(h=>(h+1)%featured.length),4500);
+  return()=>clearInterval(i);
+ },[featured.length]);
+ const f=featured[hi%Math.max(featured.length,1)];
+ const popular=[...wps].sort((a,b)=>(b.dls||0)-(a.dls||0)).slice(0,6);
+ const weekly=wps.filter(w=>w.isNew||w.mine);
+ const daily=dailyPick(wps);
+ return <div className="pg">
+  {f&&<section className="hero">
+   {featured.map((w,i)=>(
+    <div key={w.id} className={'hero-slide'+(i===hi?' on':'')}>
+     <img src={w.img} alt="" onError={e=>{e.target.style.display='none'}}/>
+     <div className="hero-shade"/>
+     {i===hi&&<div className="hero-txt">
+      <span className="hero-badge">{t.hero.badge}</span>
+      <h2 className="hero-title">{t.hero.title}<br/><span className="g">{t.hero.title2}</span></h2>
+      <p className="hero-sub">{t.hero.sub}</p>
+      <button className="cta" onClick={()=>openDetail(w)}><Ic n="zap" s={15} fill/>{t.hero.cta}</button>
+     </div>}
+    </div>
+   ))}
+   <div className="hero-dots">{featured.map((_,i)=><span key={i} className={'dot'+(i===hi?' on':'')} onClick={()=>setHi(i)}/>)}</div>
+  </section>}
+  <SectionHead title={t.home.categories} onMore={()=>go('search')} moreLabel={t.home.viewAll}/>
+  <div className="hscroll">
+   {CATS.map(c=>(
+    <div key={c.k} className="cat" onClick={()=>setCatFilter(c.k)}>
+     <span className="em">{c.em}</span><span>{t.cat[c.k]}</span>
+    </div>
+   ))}
+  </div>
+  <SectionHead title={t.home.popular} onMore={()=>go('search')} moreLabel={t.home.viewAll}/>
+  <div className="grid">
+   {popular.map(w=><WallCard key={w.id} w={w} lang={lang} t={t} fav={isFav(w.id)} onFav={toggleFav} onOpen={openDetail} onDl={download}/>)}
+  </div>
+  {weekly.length>0&&<React.Fragment>
+   <SectionHead title={t.home.weekly}/>
+   <div className="hscroll">
+    {weekly.map(w=><WallCard key={w.id} w={w} lang={lang} t={t} wide fav={isFav(w.id)} onFav={toggleFav} onOpen={openDetail} onDl={download}/>)}
+   </div>
+  </React.Fragment>}
+  {daily&&<React.Fragment>
+   <SectionHead title={t.home.daily} onMore={()=>go('daily')} moreLabel={t.home.viewAll}/>
+   <div className="hscroll">
+    <div className="wcard wide" onClick={()=>openDetail(daily)}>
+     <CardMedia w={daily}/>
+     <div className="wmeta">
+      <div className="wtitle">{lang==='ar'?daily.tar:daily.ten}</div>
+      <div className="wsub">{t.home.dailyCta}</div>
+     </div>
+     <button className="wdl" onClick={e=>{e.stopPropagation();download(daily)}}><Ic n="download" s={14}/></button>
+    </div>
+   </div>
+  </React.Fragment>}
+  <div style={{height:8}}/>
+ </div>;
+}
+
+function SearchPage({t,lang,wps,query,setQuery,activeCat,setActiveCat,activeTag,setActiveTag,openDetail,toggleFav,isFav,download}){
+ const inputRef=useRef(null);
+ useEffect(()=>{if(inputRef.current)inputRef.current.focus()},[]);
+ const q=query.trim().toLowerCase();
+ const res=wps.filter(w=>{
+  const hay=[w.ten,w.tar,w.anime,t.cat[w.cat]||'',(w.tags||[]).join(' ')].join(' ').toLowerCase();
+  const mq=!q||hay.includes(q);
+  const mc=!activeCat||w.cat===activeCat;
+  const mt=activeTag==='all'||(w.tags||[]).includes(activeTag);
+  return mq&&mc&&mt;
+ });
+ return <div className="pg">
+  <div className="search-bar">
+   <Ic n="search" s={17} c="sb-ic"/>
+   <input ref={inputRef} className="s-inp" placeholder={t.search.placeholder} value={query} onChange={e=>setQuery(e.target.value)}/>
+   {(query||activeCat||activeTag!=='all')&&<button className="s-clear" onClick={()=>{setQuery('');setActiveCat('');setActiveTag('all')}}><Ic n="x" s={14}/></button>}
+  </div>
+  <span className="lbl">{t.search.popular}</span>
+  <div className="chips">
+   {t.search.chips.map(p=>(
+    <button key={p} className={'chip'+(query===p?' on':'')} onClick={()=>{setQuery(p);setActiveCat('');}}>{p}</button>
+   ))}
+  </div>
+  <span className="lbl">{t.search.tags}</span>
+  <div className="chips">
+   {TAGS.map(tg=>(
+    <button key={tg.k} className={'chip'+(activeTag===tg.k?' on':'')} onClick={()=>setActiveTag(tg.k)}>{tg.em} {t.tag[tg.k]}</button>
+   ))}
+  </div>
+  {activeCat&&<div className="chips">
+   <button className="chip on" onClick={()=>setActiveCat('')}>{t.cat[activeCat]} <Ic n="x" s={11}/></button>
+  </div>}
+  <SectionHead title={t.search.results+' ('+res.length+')'}/>
+  {res.length?
+   <div className="grid">{res.map(w=><WallCard key={w.id} w={w} lang={lang} t={t} fav={isFav(w.id)} onFav={toggleFav} onOpen={openDetail} onDl={download}/>)}</div>
+   :<div className="empty"><div className="empty-ic">🔍</div><p>{t.search.none}</p><span>{t.search.noneSub}</span></div>}
+ </div>;
+}
+
+function FavoritesPage({t,lang,wps,favs,openDetail,toggleFav,download,go}){
+ const list=wps.filter(w=>favs.includes(w.id));
+ return <div className="pg">
+  <div className="page-head"><h2>💜 {t.fav.title}</h2><span className="count">{t.fav.count(list.length)}</span></div>
+  {list.length?
+   <div className="grid">{list.map(w=><WallCard key={w.id} w={w} lang={lang} t={t} fav={true} onFav={toggleFav} onOpen={openDetail} onDl={download}/>)}</div>
+   :<div className="empty">
+     <div className="empty-ic">💔</div><p>{t.fav.empty}</p><span>{t.fav.emptySub}</span>
+     <button className="btn btn-grad" style={{marginTop:16,maxWidth:230}} onClick={()=>go('home')}>{t.fav.cta}</button>
+    </div>}
+ </div>;
+}
+
+function DailyPage({t,lang,wps,download,downloading}){
+ const wp=dailyPick(wps);
+ const [now,setNow]=useState(Date.now());
+ useEffect(()=>{const i=setInterval(()=>setNow(Date.now()),1000);return()=>clearInterval(i)},[]);
+ if(!wp)return <div className="pg"><div className="empty"><div className="empty-ic">📭</div><p>{t.search.none}</p></div></div>;
+ const end=new Date();end.setHours(24,0,0,0);
+ const s=Math.max(0,Math.floor((end-now)/1000));
+ const hh=String(Math.floor(s/3600)).padStart(2,'0'),mm=String(Math.floor(s%3600/60)).padStart(2,'0'),ss=String(s%60).padStart(2,'0');
+ return <div className="pg">
+  <div className="page-head">
+   <h2>📅 {t.daily.title}</h2>
+   <span className="count">{new Date().toLocaleDateString(lang==='ar'?'ar':'en',{day:'numeric',month:'long'})}</span>
+  </div>
+  <div className="daily-card">
+   <div className="dc-img"><CardMedia w={wp}/></div>
+   <div className="dc-body">
+    <span className="b4k" style={{alignSelf:'flex-start',fontSize:9.5,padding:'4px 9px'}}>{t.daily.today}</span>
+    <h3>{lang==='ar'?wp.tar:wp.ten}</h3>
+    <div className="dmeta">
+     <div className="dcell"><Ic n="image" s={15} c="cy"/><b>{wp.res}</b><span>{t.detail.res}</span></div>
+     <div className="dcell"><Ic n="zap" s={15} c="cy"/><b>{wp.anime}</b><span>{t.detail.anime}</span></div>
+     <div className="dcell"><Ic n="download" s={15} c="cy"/><b>{fmt(wp.dls)}</b><span>{t.detail.dls}</span></div>
+     <div className="dcell"><Ic n="star" s={15} c="gold" fill/><b>{wp.rate}</b><span>{t.detail.rating}</span></div>
+    </div>
+    <button className="btn btn-grad" disabled={downloading} onClick={()=>download(wp)}>
+     <Ic n="download" s={17}/>{downloading?t.detail.downloading:t.daily.claim}
+    </button>
+   </div>
+  </div>
+  <div className="countdown">
+   <div className="cd-lbl">⏳ {t.daily.refresh}</div>
+   <div className="cd-row">
+    <div className="cd-box"><b>{hh}</b><span>{t.daily.h}</span></div><span className="cd-sep">:</span>
+    <div className="cd-box"><b>{mm}</b><span>{t.daily.m}</span></div><span className="cd-sep">:</span>
+    <div className="cd-box"><b>{ss}</b><span>{t.daily.s}</span></div>
+   </div>
+  </div>
+ </div>;
+}
+
+function ProfilePage({t,lang,name,isAdmin,myDlsCount,favsCount,go,openSheet,langToggle,night,setNight,shareApp,notify,openAdmin}){
+ const rows=[
+  {i:'download',l:t.profile.menu.myDownloads,fn:()=>openSheet('downloads')},
+  {i:'heart',l:t.profile.menu.myFavs,fn:()=>go('favorites')},
+  {i:'globe',l:t.profile.menu.language,fn:langToggle,right:<span className="pill">{lang==='ar'?'العربية':'English'}</span>},
+  {i:'moon',l:t.profile.menu.night,fn:()=>setNight(n=>!n),right:<span className={'sw'+(night?' on':'')}><span className="knob"/></span>},
+  {i:'share',l:t.profile.menu.share,fn:shareApp},
+  {i:'star',l:t.profile.menu.rate,fn:()=>notify(t.toast.rate)},
+  {i:'info',l:t.profile.menu.about,fn:()=>openSheet('about')},
+ ];
+ if(isAdmin)rows.push({i:'crown',l:t.profile.menu.admin,fn:openAdmin,gold:true});
+ rows.push({i:'logout',l:t.profile.menu.logout,fn:()=>notify(t.toast.bye),red:true});
+ return <div className="pg">
+  <div className="page-head"><h2>👤 {t.profile.title}</h2></div>
+  <div className="phead">
+   <div className="pavatar">👤</div>
+   <div className="pname">
+    <span style={{maxWidth:180,whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis'}}>{name||t.profile.name}</span>
+    {isAdmin&&<span className="pill mini">👑 {t.profile.adminBadge}</span>}
+    <button className="icon-btn sm" onClick={()=>openSheet('edit')}><Ic n="gear" s={13}/></button>
+   </div>
+   <div className="pemail">{t.profile.email}</div>
+   <div className="pstats">
+    <div className="pstat" onClick={()=>openSheet('downloads')}><b>{fmt(128+myDlsCount)}</b><span>{t.profile.downloads}</span></div>
+    <div className="pstat" onClick={()=>go('favorites')}><b>{favsCount}</b><span>{t.profile.favorites}</span></div>
+    <div className="pstat"><b>12.5K</b><span>{t.profile.likes}</span></div>
+   </div>
+  </div>
+  <div className="mlist">
+   {rows.map(r=>(
+    <button key={r.l} className={'mrow'+(r.red?' red':'')+(r.gold?' gold':'')} onClick={r.fn}>
+     <span className="mric"><Ic n={r.i} s={16}/></span>
+     <span className="mlbl">{r.l}</span>
+     {r.right||<Ic n="chev" s={15} c="chev"/>}
+    </button>
+   ))}
+  </div>
+ </div>;
+}
+
+/* ============ detail ============ */
+function Detail({t,lang,wp,fav,onClose,onFav,onDownload,onShare,downloading}){
+ const title=lang==='ar'?wp.tar:wp.ten;
+ return <div className="detail">
+  <div className={'d-grad '+wp.grad}/>
+  <img className="d-img" src={wp.img} alt={wp.ten} onError={e=>{e.target.style.display='none'}}/>
+  <div className="d-shade"/>
+  <div className="d-top">
+   <button className="icon-btn" onClick={onClose}><Ic n="back" s={18} c="flip"/></button>
+   <div>
+    <button className={'icon-btn'+(fav?' favd':'')} onClick={onFav}><Ic n="heart" s={17} fill={fav}/></button>
+   </div>
+  </div>
+  <div className="d-sheet">
+   <div className="d-title-row"><h3>{title}</h3>{wp.is4k?<span className="b4k">4K</span>:null}</div>
+   <div className="dmeta">
+    <div className="dcell"><Ic n="image" s={15} c="cy"/><b>{wp.res}</b><span>{t.detail.res}</span></div>
+    <div className="dcell"><Ic n="zap" s={15} c="cy"/><b>{wp.anime}</b><span>{t.detail.anime}</span></div>
+    <div className="dcell"><Ic n="download" s={15} c="cy"/><b>{fmt(wp.dls)}</b><span>{t.detail.dls}</span></div>
+    <div className="dcell"><Ic n="star" s={15} c="gold" fill/><b>{wp.rate}</b><span>{t.detail.rating}</span></div>
+   </div>
+   <button className="btn btn-grad" disabled={downloading} onClick={onDownload}>
+    <Ic n="download" s={18}/>{downloading?t.detail.downloading:t.detail.download}
+   </button>
+   <button className="btn btn-ghost" onClick={onShare}><Ic n="share" s={16}/>{t.detail.share}</button>
+  </div>
+ </div>;
+}
+
+/* ============ admin ============ */
+function AdminLogin({t,onClose,onSuccess}){
+ const [code,setCode]=useState('');
+ const [err,setErr]=useState(false);
+ const ref=useRef(null);
+ useEffect(()=>{if(ref.current)ref.current.focus()},[]);
+ function submit(e){
+  e.preventDefault();
+  if(code.trim()===ADMIN_PASS){onSuccess();}
+  else{setErr(true);setCode('');setTimeout(()=>setErr(false),800);}
+ }
+ return <div className="ov" onClick={onClose}>
+  <form className={'modal'+(err?' shake':'')} onClick={e=>e.stopPropagation()} onSubmit={submit}>
+   <div className="modal-ic"><Ic n="lock" s={26} c="cy"/></div>
+   <h3>🔒 {t.admin.title}</h3>
+   <p className="modal-sub">{t.admin.passcode}</p>
+   <input ref={ref} dir="ltr" type="password" inputMode="numeric" autoComplete="off" maxLength={8}
+    className="inp code" value={code} onChange={e=>setCode(e.target.value)} placeholder="••••••••"/>
+   {err&&<div className="err-t">✖ {t.admin.wrong}</div>}
+   <button type="submit" className="btn btn-grad"><Ic n="check" s={16}/>{t.admin.unlock}</button>
+   <div className="hint">💡 {t.admin.hint}</div>
+  </form>
+ </div>;
+}
+
+function AdminPanel({t,lang,wps,onClose,onLogout,onPublish,onDelete,notify}){
+ const [f,setF]=useState({ten:'',tar:'',anime:'',cat:'naruto',tag:'neon',res:'2160 x 3840',url:''});
+ const [file,setFile]=useState(null);
+ const set=(k,v)=>setF(o=>({...o,[k]:v}));
+ const preview=file?file.data:(f.url.trim()||null);
+ function onFile(e){
+  const fl=e.target.files&&e.target.files[0];
+  if(!fl)return;
+  const r=new FileReader();
+  r.onload=ev=>setFile({data:ev.target.result,name:fl.name});
+  r.readAsDataURL(fl);
+  e.target.value='';
+ }
+ function doPublish(){
+  const wp={id:uid(),ten:f.ten.trim(),tar:f.tar.trim()||f.ten.trim(),
+   anime:f.anime.trim()||'AniWalls',cat:f.cat,tags:[f.tag],res:f.res,
+   is4k:/3840|2160/.test(f.res)?1:0,rate:(4.5+Math.random()*0.5).toFixed(1),
+   likes:'NEW',dls:0,img:preview,grad:'g'+(1+Math.floor(Math.random()*6)),isNew:1,mine:1};
+  onPublish(wp);
+  setF({ten:'',tar:'',anime:'',cat:'naruto',tag:'neon',res:'2160 x 3840',url:''});
+  setFile(null);
+  notify(t.admin.published);
+ }
+ function publish(){
+  if(!f.ten.trim()||!preview){notify(t.admin.need);return;}
+  if(file){doPublish();return;}
+  const im=new Image();
+  im.onload=doPublish;
+  im.onerror=()=>notify(t.admin.urlBad);
+  im.src=f.url.trim();
+ }
+ const total=wps.length,mine=wps.filter(w=>w.mine).length,dlsT=wps.reduce((a,w)=>a+(w.dls||0),0);
+ return <div className="ap">
+  <div className="ap-head">
+   <span className="ap-crown"><Ic n="crown" s={20}/></span>
+   <div className="ap-tt"><b>{t.admin.title}</b><span>{t.admin.welcome}</span></div>
+   <span className="live"><span className="live-dot"/>LIVE</span>
+   <button className="icon-btn sm" onClick={onClose}><Ic n="x" s={14}/></button>
+  </div>
+  <div className="ap-body">
+   <div className="ap-stats">
+    <div className="apstat"><b>{total}</b><span>{t.admin.stats.total}</span></div>
+    <div className="apstat"><b>{mine}</b><span>{t.admin.stats.mine}</span></div>
+    <div className="apstat"><b>{fmt(dlsT)}</b><span>{t.admin.stats.dls}</span></div>
+   </div>
+   <div className="ap-card">
+    <div className="ap-card-t"><Ic n="upload" s={16} c="cy"/>{t.admin.upload}</div>
+    <label className="lbl">{t.admin.titleEn}</label>
+    <input className="inp" value={f.ten} onChange={e=>set('ten',e.target.value)} placeholder="e.g. Zoro King of Hell"/>
+    <label className="lbl">{t.admin.titleAr}</label>
+    <input className="inp" value={f.tar} onChange={e=>set('tar',e.target.value)} placeholder="مثال: زورو ملك الجحيم"/>
+    <div className="two">
+     <div>
+      <label className="lbl">{t.admin.anime}</label>
+      <input className="inp" value={f.anime} onChange={e=>set('anime',e.target.value)} placeholder="One Piece"/>
+     </div>
+     <div>
+      <label className="lbl">{t.admin.cat}</label>
+      <select className="inp" value={f.cat} onChange={e=>set('cat',e.target.value)}>
+       {CATS.map(c=><option key={c.k} value={c.k}>{t.cat[c.k]}</option>)}
+      </select>
+     </div>
+    </div>
+    <div className="two">
+     <div>
+      <label className="lbl">{t.admin.res}</label>
+      <select className="inp" value={f.res} onChange={e=>set('res',e.target.value)}>
+       <option>1080 x 1920</option><option>1440 x 2560</option><option>2160 x 3840</option>
+      </select>
+     </div>
+     <div>
+      <label className="lbl">{t.admin.styleTag}</label>
+      <select className="inp" value={f.tag} onChange={e=>set('tag',e.target.value)}>
+       {TAGS.filter(x=>x.k!=='all').map(x=><option key={x.k} value={x.k}>{t.tag[x.k]}</option>)}
+      </select>
+     </div>
+    </div>
+    <label className="lbl">{t.admin.url}</label>
+    <input className="inp" dir="ltr" value={f.url} onChange={e=>set('url',e.target.value)} placeholder="https://example.com/wallpaper.jpg"/>
+    <div className="or">{t.admin.or}</div>
+    <label className="filezone">
+     <input type="file" accept="image/*" onChange={onFile} hidden/>
+     <Ic n="image" s={22} c="cy"/>
+     <span>{file?file.name:t.admin.choose}</span>
+    </label>
+    {preview&&<div className="preview"><img src={preview} alt=""/><div className="preview-lbl">✅ {t.admin.preview}</div></div>}
+    <button className="btn btn-grad" style={{marginTop:16}} onClick={publish}><Ic n="upload" s={17}/>{t.admin.publish}</button>
+   </div>
+   <div className="ap-card">
+    <div className="ap-card-t"><Ic n="grid" s={16} c="cy"/>{t.admin.manage} ({total})</div>
+    <div className="mlist">
+     {wps.map(w=>(
+      <div key={w.id} className="mrow2">
+       <img className="mthumb" src={w.img} onError={e=>{e.target.style.visibility='hidden'}}/>
+       <div className="mmeta">
+        <b>{lang==='ar'?w.tar:w.ten}</b>
+        <span>{w.anime} • {fmt(w.dls)} ⬇</span>
+       </div>
+       {w.mine&&<span className="pill mini">LIVE</span>}
+       <button className="icon-btn sm danger" onClick={()=>{if(window.confirm(t.admin.delConfirm)){onDelete(w.id);notify(t.admin.deleted);}}}>
+        <Ic n="trash" s={14}/>
+       </button>
+      </div>
+     ))}
+    </div>
+   </div>
+   <button className="btn btn-ghost" style={{marginBottom:28,color:'var(--red)'}} onClick={onLogout}>
+    <Ic n="logout" s={16}/>{t.admin.logout}
+   </button>
+  </div>
+ </div>;
+}
+
+function EditSheet({t,onClose,current,onSave}){
+ const [v,setV]=useState(current||'');
+ return <Sheet title={t.profile.edit} onClose={onClose}>
+  <input className="inp" value={v} onChange={e=>setV(e.target.value)} maxLength={24} placeholder={t.profile.name}/>
+  <button className="btn btn-grad" style={{marginTop:14}} onClick={()=>onSave(v.trim()||t.profile.name)}><Ic n="check" s={16}/>{t.save}</button>
+ </Sheet>;
+}
+
+/* ============ app root ============ */
+function App(){
+ const [lang,setLang]=useState(()=>store.get('aw_lang','en'));
+ const [page,setPage]=useState('home');
+ const [wallpapers,setWallpapers]=useState(()=>store.get('aw_wps_v2',null)||SEED);
+ const [favs,setFavs]=useState(()=>store.get('aw_favs',[]));
+ const [myDls,setMyDls]=useState(()=>store.get('aw_dl',[]));
+ const [name,setName]=useState(()=>store.get('aw_name',''));
+ const [night,setNight]=useState(()=>store.get('aw_night',true));
+ const [isAdmin,setIsAdmin]=useState(()=>store.get('aw_admin',0)===1);
+ const [showAdmin,setShowAdmin]=useState(false);
+ const [loginOpen,setLoginOpen]=useState(false);
+ const [detail,setDetail]=useState(null);
+ const [drawer,setDrawer]=useState(false);
+ const [sheet,setSheet]=useState(null);
+ const [toast,setToast]=useState(null);
+ const [downloading,setDownloading]=useState(false);
+ const [query,setQuery]=useState('');
+ const [activeCat,setActiveCat]=useState('');
+ const [activeTag,setActiveTag]=useState('all');
+ const toastT=useRef(null);
+ const scrollRef=useRef(null);
+ const crownTaps=useRef({n:0,t:0});
+ const t=I18N[lang];
+
+ useEffect(()=>{store.set('aw_lang',lang);document.documentElement.lang=lang;document.documentElement.dir=lang==='ar'?'rtl':'ltr';},[lang]);
+ useEffect(()=>{store.set('aw_wps_v2',wallpapers)},[wallpapers]);
+ useEffect(()=>{store.set('aw_favs',favs)},[favs]);
+ useEffect(()=>{store.set('aw_dl',myDls)},[myDls]);
+ useEffect(()=>{store.set('aw_name',name)},[name]);
+ useEffect(()=>{store.set('aw_night',night)},[night]);
+ useEffect(()=>{
+  const h=e=>{if(e.key==='Escape'){setDetail(null);setDrawer(false);setLoginOpen(false);setSheet(null);setShowAdmin(false);}};
+  window.addEventListener('keydown',h);return()=>window.removeEventListener('keydown',h);
+ },[]);
+
+ const notify=msg=>{clearTimeout(toastT.current);setToast({msg,id:Date.now()});toastT.current=setTimeout(()=>setToast(null),2400);};
+ const go=p=>{setPage(p);setDrawer(false);if(scrollRef.current)scrollRef.current.scrollTop=0;};
+ const openDetail=w=>{setDetail(w);setDrawer(false);};
+ const isFav=id=>favs.includes(id);
+
+ function toggleFav(w){
+  const has=favs.includes(w.id);
+  setFavs(f=>has?f.filter(x=>x!==w.id):[...f,w.id]);
+  notify(has?t.toast.favRemove:t.toast.favAdd);
+ }
+ function bumpDls(id){setWallpapers(ws=>ws.map(w=>w.id===id?{...w,dls:(w.dls||0)+1}:w));}
+ async function download(wp){
+  if(downloading)return;
+  setDownloading(true);
+  const base=(lang==='ar'?wp.tar:wp.ten).replace(/[^\p{L}\p{N}]+/gu,'-');
+  const fname=base+'-'+wp.res.replace(/\s/g,'')+'.jpg';
+  try{
+   const res=await fetch(wp.img,{mode:'cors'});
+   const b=await res.blob();
+   const url=URL.createObjectURL(b);
+   const a=document.createElement('a');
+   a.href=url;a.download=fname;
+   document.body.appendChild(a);a.click();a.remove();
+   setTimeout(()=>URL.revokeObjectURL(url),4000);
+   notify(t.detail.downloadOk);
+  }catch(e){
+   const a=document.createElement('a');
+   a.href=wp.img;a.download=fname;a.target='_blank';a.rel='noopener';
+   document.body.appendChild(a);a.click();a.remove();
+   notify(t.detail.downloadTry);
+  }
+  bumpDls(wp.id);
+  setMyDls(m=>[{id:wp.id,at:Date.now()},...m].slice(0,60));
+  setDownloading(false);
+ }
+ async function shareWall(wp){
+  const url=wp.img.startsWith('data:')?location.href:wp.img;
+  try{
+   if(navigator.share){await navigator.share({title:'AniWalls ⚡',text:(lang==='ar'?wp.tar:wp.ten)+' — AniWalls',url});return;}
+   throw 0;
+  }catch(e){
+   try{await navigator.clipboard.writeText(url);notify(t.detail.shared);}catch(_){notify(t.toast.copied);}
+  }
+ }
+ async function shareApp(){
+  try{
+   if(navigator.share){await navigator.share({title:'AniWalls ⚡',text:t.about.body,url:location.href});return;}
+   throw 0;
+  }catch(e){
+   try{await navigator.clipboard.writeText(location.href);notify(t.toast.copied);}catch(_){}
+  }
+ }
+ function onCrown(){
+  if(isAdmin){setShowAdmin(true);return;}
+  const now=Date.now(),c=crownTaps.current;
+  if(now-c.t>1600)c.n=0;
+  c.t=now;c.n++;
+  if(c.n>=3){c.n=0;setLoginOpen(true);}
+ }
+ function langToggle(){
+  const nl=lang==='en'?'ar':'en';
+  setLang(nl);
+  notify(nl==='en'?'Language: English':'اللغة: العربية');
+ }
+ function publishWallpaper(wp){setWallpapers(ws=>[wp,...ws]);}
+ function deleteWallpaper(id){
+  setWallpapers(ws=>ws.filter(w=>w.id!==id));
+  setFavs(f=>f.filter(x=>x!==id));
+  setMyDls(m=>m.filter(x=>x.id!==id));
+ }
+ function onSuccessLogin(){
+  setIsAdmin(true);store.set('aw_admin',1);
+  setLoginOpen(false);setShowAdmin(true);
+  notify(t.toast.adminIn);
+ }
+ function onLogoutAdmin(){
+  setIsAdmin(false);store.set('aw_admin',0);
+  setShowAdmin(false);notify(t.toast.adminOut);
+ }
+ const adminAction=isAdmin?()=>{setDrawer(false);setShowAdmin(true);}:()=>{setDrawer(false);setLoginOpen(true);};
+
+ return <div className={'app'+(lang==='ar'?'':'')+(night?'':' night-off')}>
+  <div className="bgfx"><div className="gridbg"/></div>
+  <Header t={t} lang={lang} onMenu={()=>setDrawer(true)} onLang={langToggle} onCrown={onCrown}/>
+  <main className="content" ref={scrollRef} key={page}>
+   {page==='home'&&<HomePage t={t} lang={lang} wps={wallpapers} openDetail={openDetail} toggleFav={toggleFav} isFav={isFav} download={download} go={go}
+     setCatFilter={k=>{setActiveCat(k);setQuery('');setActiveTag('all');go('search');}}/>}
+   {page==='search'&&<SearchPage t={t} lang={lang} wps={wallpapers} query={query} setQuery={setQuery} activeCat={activeCat} setActiveCat={setActiveCat}
+     activeTag={activeTag} setActiveTag={setActiveTag} openDetail={openDetail} toggleFav={toggleFav} isFav={isFav} download={download}/>}
+   {page==='favorites'&&<FavoritesPage t={t} lang={lang} wps={wallpapers} favs={favs} openDetail={openDetail} toggleFav={toggleFav} download={download} go={go}/>}
+   {page==='daily'&&<DailyPage t={t} lang={lang} wps={wallpapers} download={download} downloading={downloading}/>}
+   {page==='profile'&&<ProfilePage t={t} lang={lang} name={name} isAdmin={isAdmin} myDlsCount={myDls.length} favsCount={favs.length} go={go}
+     openSheet={setSheet} langToggle={langToggle} night={night} setNight={setNight} shareApp={shareApp} notify={notify} openAdmin={()=>setShowAdmin(true)}/>}
+  </main>
+  <BottomNav t={t} page={page} go={go}/>
+
+  {drawer&&<Drawer t={t} onClose={()=>setDrawer(false)} go={go} shareApp={shareApp} adminAction={adminAction} onAbout={()=>{setDrawer(false);setSheet('about');}}/>}
+  {detail&&<Detail t={t} lang={lang} wp={detail} fav={isFav(detail.id)} onClose={()=>setDetail(null)}
+    onFav={()=>toggleFav(detail)} onDownload={()=>download(detail)} onShare={()=>shareWall(detail)} downloading={downloading}/>}
+  {sheet==='downloads'&&<Sheet title={'⬇ '+t.profile.menu.myDownloads} onClose={()=>setSheet(null)}>
+   {myDls.length===0?<div className="empty" style={{padding:'26px 10px'}}><p>{t.dlEmpty}</p></div>:
+    myDls.map(d=>{
+     const w=wallpapers.find(x=>x.id===d.id);
+     if(!w)return null;
+     return <div key={d.id} className="dlrow">
+      <img src={w.img} onError={e=>{e.target.style.visibility='hidden'}}/>
+      <div className="dlmeta"><b>{lang==='ar'?w.tar:w.ten}</b><span>{w.res}</span></div>
+      <button className="icon-btn sm" onClick={()=>download(w)}><Ic n="download" s={14}/></button>
+     </div>;
+    })}
+  </Sheet>}
+  {sheet==='about'&&<Sheet title={t.about.title} onClose={()=>setSheet(null)}>
+   <p style={{fontSize:12.5,color:'var(--tx2)',lineHeight:1.9}}>{t.about.body}</p>
+   <div style={{textAlign:'center',marginTop:14}}><span className="pill">AniWalls v2.0 • 👑 Mido © 2026</span></div>
+  </Sheet>}
+  {sheet==='edit'&&<EditSheet t={t} current={name||t.profile.name} onClose={()=>setSheet(null)}
+   onSave={v=>{setName(v);setSheet(null);notify(t.toast.nameSaved);}}/>}
+  {loginOpen&&<AdminLogin t={t} onClose={()=>setLoginOpen(false)} onSuccess={onSuccessLogin}/>}
+  {showAdmin&&isAdmin&&<AdminPanel t={t} lang={lang} wps={wallpapers} onClose={()=>setShowAdmin(false)} onLogout={onLogoutAdmin}
+    onPublish={publishWallpaper} onDelete={deleteWallpaper} notify={notify}/>}
+  {toast&&<div key={toast.id} className="toast">{toast.msg}</div>}
+ </div>;
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
